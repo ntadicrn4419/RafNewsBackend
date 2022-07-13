@@ -2,10 +2,13 @@ package com.example.raf_news_backend;
 
 import com.example.raf_news_backend.repositories.categories.ICategoryRepository;
 import com.example.raf_news_backend.repositories.categories.InMemoryCategoryRepository;
+import com.example.raf_news_backend.repositories.categories.MySqlCategoryRepository;
 import com.example.raf_news_backend.repositories.news.INewsRepository;
 import com.example.raf_news_backend.repositories.news.InMemoryNewsRepository;
+import com.example.raf_news_backend.repositories.news.MySqlNewsRepository;
 import com.example.raf_news_backend.repositories.user.IUserRepository;
 import com.example.raf_news_backend.repositories.user.InMemoryUserRepository;
+import com.example.raf_news_backend.repositories.user.MySqlUserRepository;
 import com.example.raf_news_backend.services.CategoryService;
 import com.example.raf_news_backend.services.NewsService;
 import com.example.raf_news_backend.services.UserService;
@@ -29,9 +32,12 @@ public class RafNewsApplication extends ResourceConfig {
         AbstractBinder binder = new AbstractBinder() {
             @Override
             protected void configure() {
-                this.bind(InMemoryNewsRepository.class).to(INewsRepository.class).in(Singleton.class);
-                this.bind(InMemoryUserRepository.class).to(IUserRepository.class).in(Singleton.class);
-                this.bind(InMemoryCategoryRepository.class).to(ICategoryRepository.class).in(Singleton.class);
+                this.bind(MySqlNewsRepository.class).to(INewsRepository.class).in(Singleton.class);
+                //this.bind(InMemoryNewsRepository.class).to(INewsRepository.class).in(Singleton.class);
+                this.bind(MySqlUserRepository.class).to(IUserRepository.class).in(Singleton.class);
+                //this.bind(InMemoryUserRepository.class).to(IUserRepository.class).in(Singleton.class);
+                this.bind(MySqlCategoryRepository.class).to(ICategoryRepository.class).in(Singleton.class);
+                //this.bind(InMemoryCategoryRepository.class).to(ICategoryRepository.class).in(Singleton.class);
 
                 this.bindAsContract(CategoryService.class);
                 this.bindAsContract(NewsService.class);

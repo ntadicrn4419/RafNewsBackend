@@ -26,7 +26,6 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     public Response login(@Valid LoginRequest loginRequest)
     {
-        System.out.println("Usao je u login u UserResource");
         Map<String, String> response = new HashMap<>();
 
         String jwt = this.userService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -36,6 +35,10 @@ public class UserResource {
         }
 
         response.put("jwt", jwt);
+
+        System.out.println("Pocetak jwt:");
+        System.out.println(jwt);
+        System.out.println("Kraj jwt");
 
         return Response.ok(response).build();
     }

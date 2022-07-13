@@ -18,7 +18,6 @@ public class CategoryResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Category> all()
     {
-        System.out.println("Usao je u all() u CategoryResource");
         return this.categoryService.allCategories();
     }
 
@@ -28,13 +27,6 @@ public class CategoryResource {
         return this.categoryService.addCategory(category);
     }
 
-//    @GET
-//    @Path("/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Category find(@PathParam("id") Integer id) {
-//        return this.categoryService.findCategory(id);
-//    }
-
     @GET
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,20 +34,12 @@ public class CategoryResource {
         return this.categoryService.findCategory(name);
     }
 
-
     @PUT
     @Path("/{name}")
     public void update(@PathParam("name") String oldName,
                        @Valid Category category) {
          this.categoryService.updateCategory(oldName, category.getName(), category.getDescription());
     }
-
-
-//    @DELETE
-//    @Path("/{id}")
-//    public void delete(@PathParam("id") Integer id) {
-//        this.categoryService.deleteCategory(id);
-//    }
 
     @DELETE
     @Path("/{name}")

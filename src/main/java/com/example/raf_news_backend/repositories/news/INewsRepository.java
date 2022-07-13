@@ -15,4 +15,5 @@ public interface INewsRepository {
     void updateNews(Integer id, String title, String category, String tags, String text);
     void updateCategoryName(String oldCategoryName, String newCategoryName);
     Comment addComment(Integer newsId, Comment comment);
+    List<News> findAllSimilarNewsByKeyword(String keyword);
 }

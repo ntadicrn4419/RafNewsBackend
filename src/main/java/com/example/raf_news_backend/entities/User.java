@@ -1,7 +1,4 @@
 package com.example.raf_news_backend.entities;
-
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +6,6 @@ public class User {
 
     @NotNull(message = "Email field is required")
     @NotEmpty(message = "Email field is required")
-    //@UniqueElements //i want email to be unique. check if this is for that
     private String email;
 
     @NotNull(message = "Firstname field is required")

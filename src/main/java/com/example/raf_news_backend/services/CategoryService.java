@@ -11,6 +11,11 @@ public class CategoryService {
     private ICategoryRepository categoryRepository;
 
     public Category addCategory(Category category) {
+        for(Category c: categoryRepository.allCategories()){
+            if(c.getName().equalsIgnoreCase(category.getName())){
+                return null;
+            }
+        }
         return this.categoryRepository.addCategory(category);
     }
 
@@ -18,17 +23,9 @@ public class CategoryService {
         return this.categoryRepository.allCategories();
     }
 
-//    public Category findCategory(Integer id) {
-//        return this.categoryRepository.findCategory(id);
-//    }
-
     public Category findCategory(String name) {
         return this.categoryRepository.findCategory(name);
     }
-
-//    public void deleteCategory(Integer id) {
-//        this.categoryRepository.deleteCategory(id);
-//    }
 
     public void deleteCategory(String name) {
         this.categoryRepository.deleteCategory(name);

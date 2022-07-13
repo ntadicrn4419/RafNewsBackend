@@ -16,22 +16,25 @@ public class News {
     @NotEmpty(message = "Text field is required")
     private String text;
 
-    @NotNull(message = "Tags field is required")
-    @NotEmpty(message = "Tags field is required")
-    private String tags;
-
     @NotNull(message = "Category field is required")
     @NotEmpty(message = "Category field is required")
     private String category;
+
+//    @NotNull(message = "Tags field is required")
+//    @NotEmpty(message = "Tags field is required")
+    private String tags;
 
     private String dateCreated;
 
     private Integer numberOfVisits;
 
-    private User author;
+    //private User author;
+    private String authorEmail;
 
+    //U tabeli COMMENT ce biti newsId
     private List<Comment> comments;
 
+    //POSEBNA TABELA u kojoj ce biti redovi sa newsId i tagId;
     private List<Tag> tagList;
 
 
@@ -40,13 +43,13 @@ public class News {
 
     }
 
-    public News(Integer id, String title, String text, String dateCreated, Integer numberOfVisits, User author, List<Comment> comments, String tags, String category) {
+    public News(Integer id, String title, String text, String dateCreated, Integer numberOfVisits, String authorEmail, List<Comment> comments, String tags, String category) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.dateCreated = dateCreated;
         this.numberOfVisits = numberOfVisits;
-        this.author = author;
+        this.authorEmail = authorEmail;
         this.comments = comments;
         this.tags = tags;
         this.category = category;
@@ -99,12 +102,12 @@ public class News {
         this.numberOfVisits = numberOfVisits;
     }
 
-    public User getAuthor() {
-        return author;
+    public String getAuthorEmail() {
+        return authorEmail;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorEmail(String authorEmail) {
+        this.authorEmail = authorEmail;
     }
 
     public List<Comment> getComments() {
@@ -138,4 +141,5 @@ public class News {
     public void setTags(String tags) {
         this.tags = tags;
     }
+
 }

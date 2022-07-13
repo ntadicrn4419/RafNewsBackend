@@ -1,18 +1,17 @@
 package com.example.raf_news_backend.repositories.news;
 import com.example.raf_news_backend.entities.Comment;
 import com.example.raf_news_backend.entities.News;
+import com.example.raf_news_backend.entities.Tag;
 import com.example.raf_news_backend.repositories.user.InMemoryUserRepository;
 import com.example.raf_news_backend.services.UserService;
 import javassist.Loader;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InMemoryNewsRepository implements INewsRepository{
-    private static List<News> newsList = new CopyOnWriteArrayList<>();
+    public static List<News> newsList = new CopyOnWriteArrayList<>();
 
     static {
 
@@ -25,7 +24,7 @@ public class InMemoryNewsRepository implements INewsRepository{
         n1.setText("gas gas gas gascina");
         n1.setDateCreated(formatter.format(new Date()));
         n1.setNumberOfVisits(0);
-        n1.setAuthor(InMemoryUserRepository.USERS.get(0));
+        n1.setAuthorEmail(InMemoryUserRepository.USERS.get(0).getEmail());
         n1.setComments(new ArrayList<>());
         n1.setTagList(new ArrayList<>());
         //n1.setCategory(InMemoryCategoryRepository.categoryList.get(0));
@@ -38,7 +37,7 @@ public class InMemoryNewsRepository implements INewsRepository{
         n2.setText("dfnoAFNASKDLFNSDKL");
         n2.setDateCreated("04-07-2022");
         n2.setNumberOfVisits(0);
-        n2.setAuthor(InMemoryUserRepository.USERS.get(0));
+        n2.setAuthorEmail(InMemoryUserRepository.USERS.get(0).getEmail());
         n2.setComments(new ArrayList<>());
         n2.setTagList(new ArrayList<>());
         //n2.setCategory(InMemoryCategoryRepository.categoryList.get(1));
@@ -51,7 +50,7 @@ public class InMemoryNewsRepository implements INewsRepository{
         n3.setText("dfnoAFNASKDLFNSDKL");
         n3.setDateCreated("09-07-2022");
         n3.setNumberOfVisits(0);
-        n3.setAuthor(InMemoryUserRepository.USERS.get(0));
+        n3.setAuthorEmail(InMemoryUserRepository.USERS.get(0).getEmail());
         n3.setComments(new ArrayList<>());
         n3.setTagList(new ArrayList<>());
         //n3.setCategory(InMemoryCategoryRepository.categoryList.get(1));
@@ -64,10 +63,18 @@ public class InMemoryNewsRepository implements INewsRepository{
         n4.setText("dfnoAFNASKDLFNSDKL");
         n4.setDateCreated("02-07-2022");
         n4.setNumberOfVisits(0);
-        n4.setAuthor(InMemoryUserRepository.USERS.get(0));
+        n4.setAuthorEmail(InMemoryUserRepository.USERS.get(0).getEmail());
         n4.setComments(new ArrayList<>());
-        n4.setTagList(new ArrayList<>());
-        //n4.setCategory(InMemoryCategoryRepository.categoryList.get(1));
+
+        List<Tag> tagList = new ArrayList<>();
+        List<String> keywords = new ArrayList<>();
+        keywords.add("politika");
+        keywords.add("ludilo mozga");
+        keywords.add("bezveze");
+        Tag t = new Tag(1,keywords);
+        tagList.add(t);
+
+        n4.setTagList(tagList);
         n4.setCategory("Politika");
 
         newsList.add(n1);
@@ -80,16 +87,14 @@ public class InMemoryNewsRepository implements INewsRepository{
     @Override
     public synchronized News addNews(News news) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Integer id = newsList.size();
+        int id = newsList.size();
         news.setId(id+1);
         news.setDateCreated(formatter.format(new Date()));
         news.setNumberOfVisits(0);
-
-        //news.setAuthor(new User("admin@gmail.com", "Nikola", "Nikolic", "admin", true, "123"));//tmp resenje za testiranje
-        news.setAuthor(UserService.currentUser);
-
-        //parsirati string news.getTags u listu news.getTagList
-
+        news.setAuthorEmail(UserService.currentUser.getEmail());
+        if(news.getTags() != null && !news.getTags().isEmpty()){
+            news.setTagList(parseTagStringToList(news.getTags()));
+        }
         news.setComments(new ArrayList<>());
         newsList.add(Math.toIntExact(id), news);
 
@@ -133,7 +138,9 @@ public class InMemoryNewsRepository implements INewsRepository{
             if(n.getId().equals(id)){
                 n.setTitle(title);
                 n.setCategory(category);
-                n.setTags(tags);
+                if(tags != null && !tags.equals("")){
+                    n.setTagList(parseTagStringToList(tags));
+                }
                 n.setText(text);
                 return;
             }
@@ -160,5 +167,30 @@ public class InMemoryNewsRepository implements INewsRepository{
             }
         }
         return comment;
+    }
+
+    @Override
+    public List<News> findAllSimilarNewsByKeyword(String keyword) {
+        Set<News> set = new HashSet<>();
+        for(News n: newsList){
+            for(Tag t: n.getTagList()){
+                for(String s: t.getKeyWords()){
+                    if(s.equalsIgnoreCase(keyword)){
+                        set.add(n);
+                        break;
+                    }
+                }
+            }
+        }
+        return new ArrayList<>(set);
+    }
+
+    List<Tag> parseTagStringToList(String tags){
+        String[] tagsArray = tags.split(",");
+        List<Tag> tagList = new ArrayList<>();
+        Tag t = new Tag();
+        t.setKeyWords(Arrays.asList(tagsArray));
+        tagList.add(t);
+        return tagList;
     }
 }

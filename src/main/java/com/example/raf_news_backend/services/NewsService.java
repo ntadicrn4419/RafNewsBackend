@@ -42,4 +42,8 @@ public class NewsService {
     public Comment addComment(Integer newsId, Comment comment) {
         return this.newsRepository.addComment(newsId, comment);
     }
+
+    public List<News> allSimilarNewsByKeyword(String keyword) {
+        return this.newsRepository.findAllSimilarNewsByKeyword(keyword);
+    }
 }

@@ -33,10 +33,17 @@ public class NewsResource {
         return this.newsService.allNewsbyCategory(categoryName);
     }
 
+    @GET
+    @Path("/similar-news/{keyword}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<News> allSimilarNewsByKeyword(@PathParam("keyword") String keyword)
+    {
+        return this.newsService.allSimilarNewsByKeyword(keyword);
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public News create(@Valid News news) {
-        System.out.println("Usao je u create u NewsResource");
         return this.newsService.addNews(news);
     }
 

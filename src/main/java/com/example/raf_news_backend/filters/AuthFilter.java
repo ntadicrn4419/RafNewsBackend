@@ -29,7 +29,7 @@ public class AuthFilter implements ContainerRequestFilter {
                 token = token.replace("Bearer ", "");
             }
 
-            if (!this.userService.isAuthorized(token)) {
+            if (!this.userService.isAuthorized(token, requestContext)) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         } catch (Exception exception) {
@@ -45,12 +45,6 @@ public class AuthFilter implements ContainerRequestFilter {
         if (req.getMethod().equals("GET")) {
             return false;
         }
-//        List<Object> matchedResources = req.getUriInfo().getMatchedResources();
-//        for (Object matchedResource : matchedResources) {
-//            if (matchedResource instanceof CategoryResource && req.getMethod().equals("GET")) {
-//                return false;
-//            }
-//        }
         return true;
 
     }

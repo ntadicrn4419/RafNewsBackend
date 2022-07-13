@@ -1,6 +1,8 @@
 package com.example.raf_news_backend.repositories.categories;
 
 import com.example.raf_news_backend.entities.Category;
+import com.example.raf_news_backend.entities.News;
+import com.example.raf_news_backend.repositories.news.InMemoryNewsRepository;
 
 
 import java.util.ArrayList;
@@ -46,16 +48,6 @@ public class InMemoryCategoryRepository implements ICategoryRepository{
         return new ArrayList<>(categoryList);
     }
 
-//    @Override
-//    public Category findCategory(Integer id) {
-//        for(Category c: categoryList){
-//            if(c.getId().equals(id)){
-//                return c;
-//            }
-//        }
-//        return null;
-//    }
-
     @Override
     public Category findCategory(String name) {
         for(Category c: categoryList){
@@ -66,13 +58,17 @@ public class InMemoryCategoryRepository implements ICategoryRepository{
         return null;
     }
 
-//    @Override
-//    public void deleteCategory(Integer id) {
-//        categoryList.removeIf(c -> c.getId().equals(id));
-//    }
-
     @Override
     public void deleteCategory(String name) {
+        for(Category c: categoryList){
+            if(c.getName().equals(name)){
+                for(News n: InMemoryNewsRepository.newsList){
+                    if(n.getCategory().equals(c.getName())){//ukoliko kategorija nije prazna, ne zelimo da dozvolimo brisanje kategorije!
+                        return;
+                    }
+                }
+            }
+        }
         categoryList.removeIf(c -> c.getName().equals(name));
     }
 
